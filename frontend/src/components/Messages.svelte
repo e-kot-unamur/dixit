@@ -17,6 +17,14 @@
     height: 100vh;
   }
 
+  h1 {
+    flex-basis: 100%;
+    text-align: center;
+    font-weight: 100;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+  }
+
   @media (max-width: 540px) {
     .message {
       flex-basis: 100%;
@@ -57,7 +65,9 @@
   }
 </style>
 
+
 <div class="container">
+  <h1>{window.location.origin}</h1>
   {#await response then messages}
     {#each messages as message}
       <div class="message" key={message.text}>
