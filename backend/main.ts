@@ -1,51 +1,78 @@
-import { serve } from "https://deno.land/std/http/server.ts";
+import { serve, ServerRequest, Response } from "https://deno.land/std/http/server.ts";
+import { acceptWebSocket, WebSocket } from "https://deno.land/std/ws/mod.ts";
 
 class Message {
+  id: number;
   author: string;
   text: string;
   date: number;
 
-  constructor(author: string, text: string) {
-    if (!author || !text) {
+  constructor(id: number, author: string, text: string) {
+    if (typeof author !== 'string' || typeof text !== 'string') {
       throw new Error('invalid message');
     }
 
+    this.id = id;
     this.author = author;
     this.text = text;
     this.date = Date.now();
   }
 }
 
-const server = serve({ port: 8000 });
-console.log("http://localhost:8000/");
-
-// TODO : Load file
-const messages = [];
-
-for await (const req of server) {
-  switch (req.method) {
-    case 'GET':
-      req.respond({ status: 200, body: JSON.stringify(messages) });
-      break;
-
-    case 'POST':
+async function handleRequest(route: string, req: ServerRequest): Promise<Response | void> {
+  switch(route) {
+    case 'GET /messages':
+      return { body: JSON.stringify(messages) };
+    
+    case 'POST /messages':
       try {
         const body = await Deno.readAll(req.body);
         const json = new TextDecoder('utf-8').decode(body);
         const data = JSON.parse(json);
-        const message = new Message(data.author, data.text);
-        console.log(`Received ${json}`);
+        const message = new Message(messages.length, data.author, data.text);
         messages.push(message);
-        req.respond({ status: 200 });
+        return {};
       } catch {
-        console.error('Bad request');
-        req.respond({ status: 400 });
+        return { status: 400 };
       }
-      break;
+    
+    case 'GET /ws':
+      try {
+        const { conn, r: bufReader, w: bufWriter, headers } = req;
+        acceptWebSocket({ conn, bufReader, bufWriter, headers }).then(handleSocket);
+      } catch {
+
+      }
+      return;
 
     default:
-      console.error('Unsupported method');
-      req.respond({ status: 400 });
-      break;
+      return { status: 404 };
   }
+}
+
+async function handleSocket(ws: WebSocket): Promise<void> {
+  for await (const event of ws) {
+    if (typeof event === 'string') {
+      try {
+        const data = JSON.parse(event);
+        const message = new Message(messages.length, data.author, data.text);
+        messages.push(message);
+      } catch {
+
+      }
+    }
+  }
+}
+
+// TODO : Load file
+const messages: Message[] = [];
+
+for await (const req of serve({ port: 8000 })) {
+  const route = `${req.method} ${req.url}`;
+  handleRequest(route, req).then(res => {
+    if (res) {
+      console.log(`[${res.status ?? 200}] ${route}`);
+      req.respond(res);
+    }
+  });
 }
