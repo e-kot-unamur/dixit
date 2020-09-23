@@ -11,4 +11,4 @@ RUN npm run build
 
 EXPOSE 8000
 
-CMD ["serve", "-p", "8000", "-s", "public/"]
+CMD ["serve", "-p", "5000", "-s", "public/"]
