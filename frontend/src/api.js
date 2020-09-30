@@ -21,9 +21,9 @@ export function postQuote(text, author) {
 const wsHost = host.replace('http', 'ws');
 const ws = new WebSocket(`${wsHost}/ws`);
 
-// export function postQuote(text, author) {
-//     ws.send(JSON.stringify({ text, author }));
-// }
+ws.onclose = () => {
+    setTimeout(() => location.reload(), 5000);
+};
 
 export function onQuote(callback) {
     ws.onmessage = (message) => {
