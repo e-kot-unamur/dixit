@@ -1,14 +1,13 @@
 <script>
+  import { postQuote } from "../api";
+
   let author = "";
   let text = "";
 
   $: disabled = !author.trim() || !text.trim();
 
   async function handleSubmit(e) {
-    await fetch("http://localhost:8000/messages", {
-      method: "POST",
-      body: JSON.stringify({ author, text }),
-    });
+    postQuote(text, author);
     author = "";
     text = "";
   }

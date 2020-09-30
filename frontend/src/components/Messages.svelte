@@ -1,11 +1,10 @@
 <script>
-  let response = [];
+  import { getQuotes, onQuote } from "../api";
 
-  setInterval(() => {
-    response = fetch("http://localhost:8000/messages").then((res) =>
-      res.json()
-    );
-  }, 1000);
+  let response = [];
+  
+  getQuotes().then((quotes) => response = quotes);
+  onQuote((quote) => response = [...response, quote]);
 </script>
 
 <style>
@@ -64,7 +63,6 @@
     font-weight: 100;
   }
 </style>
-
 
 <div class="container">
   <h1>{window.location.origin}</h1>
