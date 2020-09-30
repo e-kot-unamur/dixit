@@ -37,12 +37,10 @@ async function handleRequest(route: string, req: ServerRequest): Promise<Respons
       }
     
     case 'GET /ws':
-      try {
-        const { conn, r: bufReader, w: bufWriter, headers } = req;
-        acceptWebSocket({ conn, bufReader, bufWriter, headers }).then(handleSocket);
-      } catch {
-
-      }
+      const { conn, r: bufReader, w: bufWriter, headers } = req;
+      acceptWebSocket({ conn, bufReader, bufWriter, headers })
+        .then(handleSocket)
+        .catch(console.error);
       return;
 
     default:
