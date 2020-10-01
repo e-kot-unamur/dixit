@@ -6,6 +6,7 @@ import QuoteStore from "./QuoteStore.ts";
 const PORT = parseInt(Deno.env.get("PORT") ?? "8000");
 const PRODUCTION = (Deno.env.get("PRODUCTION") ?? "true") !== "false";
 const QUOTES_DIR = Deno.env.get("QUOTES_DIR") ?? "quotes";
+const PING_INTERVAL = parseInt(Deno.env.get("PING_INTERVAL") ?? "60") * 1000;
 
 const quotes = new QuoteStore(QUOTES_DIR);
 
@@ -43,9 +44,11 @@ async function handleSocket(ws: WebSocket): Promise<void> {
     ws.send(JSON.stringify(quote));
   }
 
+  const ping = setInterval(() => ws.ping(), PING_INTERVAL);
   quotes.addCallback(send);
   for await (const _ of ws) {} // wait to be closed
   quotes.removeCallback(send);
+  clearInterval(ping);
 }
 
 if (import.meta.main) {

@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  web:
+    depends_on:
+      - server
+    build:
+      context: frontend
+    networks:
+      - proxy
+    ports:
+      - '8000:8000'
+
+  server:
+    build:
+      context: backend
+    environment:
+      - PORT=8001
+      - QUOTES_DIR=/home/deno/quotes
+      - PING_INTERVAL=50
+    volumes:
+      - ./quotes:/home/deno/quotes
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    driver: bridge

@@ -1,14 +1,12 @@
-FROM node:14-alpine
+FROM node:latest AS builder
 
-WORKDIR /app
-
+WORKDIR /dixit
 COPY . .
+RUN npm install
+RUN npm run build
 
-RUN npm install 
-RUN npm install -g serve
 
-RUN npm run build 
+FROM nginx:alpine
 
-EXPOSE 8000
-
-CMD ["serve", "-p", "5000", "-s", "public/"]
+COPY app.conf /etc/nginx/conf.d
+COPY --from=builder /dixit/public /usr/share/nginx/html

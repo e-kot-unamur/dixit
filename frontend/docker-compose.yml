@@ -1,6 +1,0 @@
-version: '2.0'
-services:
-  dixit-front:
-    build: .
-    ports: 
-      - 80:5000

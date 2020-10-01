@@ -1,6 +1,5 @@
 // HTTP
-const production = false;
-const host = production
+const host = PRODUCTION
     ? location.origin
     : "http://localhost:8001";
 
