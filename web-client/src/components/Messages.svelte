@@ -16,14 +16,6 @@
     height: 100vh;
   }
 
-  h1 {
-    flex-basis: 100%;
-    text-align: center;
-    font-weight: 100;
-    margin-top: 5vh;
-    margin-bottom: 5vh;
-  }
-
   @media (max-width: 540px) {
     .message {
       flex-basis: 100%;

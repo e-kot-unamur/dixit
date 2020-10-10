@@ -13,11 +13,12 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont
 from waveshare_epd import epd7in5b_HD as epd
 
-PRODUCTION = False
-QUOTES_URL = 'http://localhost:8001/quotes'
-WEBSOCKET_URL = 'ws://localhost:8001/ws'
+PRODUCTION = True
+TIMEOUT = 60
+HOST = 'localhost:8000'
+QUOTES_URL = f'http://{HOST}/quotes'
+WEBSOCKET_URL = f'ws://{HOST}}/ws'
 PLACEHOLDER_QUOTE = {'id': 0, 'author': 'version 1.0.0', 'text': 'dixit', 'date': 0}
-TIMEOUT = 6
 
 
 def main():
@@ -91,7 +92,7 @@ def draw(draws):
     red_draw = ImageDraw.Draw(red_image) if PRODUCTION else black_draw
 
     # Initialization
-    display = epd.EDP()
+    display = epd.EPD()
     display.init()
 
     # Main loop
@@ -119,7 +120,9 @@ def draw(draws):
 
         # Display on screen
         if PRODUCTION:
+            display.init()
             display.display(display.getbuffer(black_image), display.getbuffer(red_image))
+            display.sleep()
         else:
             black_image.show()
 
@@ -130,7 +133,6 @@ def draw(draws):
         logging.info('Drawing done')
 
     # Sleep
-    display.sleep()
     display.Dev_exit()
 
 
