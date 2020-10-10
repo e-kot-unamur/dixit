@@ -1,24 +1,20 @@
 // HTTP
-const host = PRODUCTION
-    ? location.origin
-    : "http://localhost:8001";
-
 export async function getQuotes() {
-    const response = await fetch(`${host}/quotes`);
+    const response = await fetch('/quotes');
     const quotes = await response.json();
     return quotes;
 }
 
 export function postQuote(text, author) {
-    fetch(`${host}/quotes`, {
+    fetch('quotes', {
         method: 'POST',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ text, author }),
     });
 }
 
 // WebSocket
-const wsHost = host.replace('http', 'ws');
-const ws = new WebSocket(`${wsHost}/ws`);
+const ws = new WebSocket(`${location.origin.replace('http', 'ws')}/ws`);
 
 ws.onclose = () => {
     setTimeout(() => location.reload(), 5000);

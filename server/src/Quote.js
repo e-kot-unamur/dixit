@@ -1,10 +1,10 @@
-export default class Quote {
-  id: number;
-  author: string;
-  text: string;
-  date: number;
+class Quote {
+  id;
+  author;
+  text;
+  date;
 
-  constructor(id: number, author: string, text: string) {
+  constructor(id, author, text) {
     if (typeof author !== "string" || typeof text !== "string") {
         throw new Error("author or text missing");
     }
@@ -15,3 +15,5 @@ export default class Quote {
     this.date = Date.now();
   }
 }
+
+module.exports = Quote;

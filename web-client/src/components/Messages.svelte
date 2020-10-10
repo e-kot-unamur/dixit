@@ -65,7 +65,6 @@
 </style>
 
 <div class="container">
-  <h1>{window.location.origin}</h1>
   {#await response then messages}
     {#each messages as message}
       <div class="message" key={message.text}>
