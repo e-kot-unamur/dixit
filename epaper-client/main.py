@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
-import json
-import time
 import asyncio
-import threading
-import urllib.request
-import websockets
+import json
+import logging
+import os
 import queue
 import textwrap
+import threading
+import time
+import urllib.request
+
+import websockets
 from PIL import Image, ImageDraw, ImageFont
+
 from waveshare_epd import epd7in5b_HD as epd
 
-PRODUCTION = True
-TIMEOUT = 60
-HOST = 'localhost:8000'
+PRODUCTION = os.environ.get('PRODUCTION', '1').lower() not in ['0', 'false']
+TIMEOUT = int(os.environ.get('TIMEOUT', '60'))
+HOST = os.environ.get('HOST', 'localhost:8000')
 QUOTES_URL = f'http://{HOST}/quotes'
-WEBSOCKET_URL = f'ws://{HOST}}/ws'
+WEBSOCKET_URL = f'ws://{HOST}/ws'
 PLACEHOLDER_QUOTE = {'id': 0, 'author': 'version 1.0.0', 'text': 'dixit', 'date': 0}
 
 
@@ -79,11 +82,12 @@ def draw(draws):
     author_font = ImageFont.truetype('fonts/Ubuntu-L.ttf', 32)
 
     total_w, total_h = 880, 528
-    atom_w, atom_h = author_font.getsize('e')
 
+    _, atom_h = author_font.getsize('e')
     author_w, author_h = total_w, atom_h + 32
     text_w, text_h = total_w, total_h - author_h
 
+    atom_w, atom_h = text_font.getsize('e')
     cols, lines = text_w // atom_w, text_h // atom_h
 
     black_image = Image.new('1', (total_w, total_h), color=255)
@@ -91,9 +95,7 @@ def draw(draws):
     black_draw = ImageDraw.Draw(black_image)
     red_draw = ImageDraw.Draw(red_image) if PRODUCTION else black_draw
 
-    # Initialization
     display = epd.EPD()
-    display.init()
 
     # Main loop
     thread = threading.current_thread()
@@ -109,13 +111,13 @@ def draw(draws):
         # Render text
         text = textwrap.fill(quote['text'], width=cols, max_lines=lines, replace_whitespace=False)
         w, h = text_font.getsize_multiline(text, spacing=0)
-        pos = (text_w - w) / 2, (text_h - h) / 2
+        pos = (text_w - w) // 2, (text_h - h) // 2
         black_draw.text(pos, text=text, font=text_font, fill=0, spacing=0, align='center')
 
         # Render author
         author = quote['author']
         w, h = author_font.getsize(author)
-        pos = (author_w - w) / 2, text_h + (author_h - h) / 2
+        pos = (author_w - w) // 2, text_h + (author_h - h) // 2
         red_draw.text(pos, text=author, font=author_font, fill=0)
 
         # Display on screen
@@ -132,7 +134,6 @@ def draw(draws):
 
         logging.info('Drawing done')
 
-    # Sleep
     display.Dev_exit()
 
 

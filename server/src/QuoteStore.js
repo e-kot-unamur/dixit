@@ -21,6 +21,7 @@ class QuoteStore {
       this.counter = Math.max(this.counter, quote.id);
     }
 
+    this.quotes.sort((a, b) => a.id - b.id);
     console.info(`${this.quotes.length} quote(s) loaded from ${this.path}/`);
   }
 

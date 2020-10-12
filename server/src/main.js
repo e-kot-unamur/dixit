@@ -40,5 +40,5 @@ app.ws("/ws", (ws) => {
 store.load().then(() => {
     app.listen(PORT, () => {
         console.info(`listening on 0.0.0.0:${PORT}`);
-    })
+    });
 });
