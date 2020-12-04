@@ -17,7 +17,7 @@ The e-paper client has been designed for the [Waveshare's 7.5" HD HAT B](https:/
 git clone https://github.com/e-kot-unamur/dixit.git
 
 # Download dependencies for the server
-cd dixit/web-server
+cd dixit/server
 npm install
 
 # Build static files for the web client
