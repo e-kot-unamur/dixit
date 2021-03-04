@@ -3,5 +3,14 @@
   import Messages from "./components/Messages.svelte";
 </script>
 
-<Form />
-<Messages />
+<style>
+  main {
+    margin: auto; 
+    max-width: 35rem;
+  }
+</style>
+
+<main>
+  <Form />
+  <Messages />
+</main>

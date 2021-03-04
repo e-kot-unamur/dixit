@@ -11,35 +11,22 @@
   .container {
     display: flex;
     flex-wrap: wrap;
-    align-content: flex-start;
+    align-content: center;
     flex-direction: column-reverse;
     width: 100%;
     min-height: 100vh;
   }
 
-  @media (max-width: 540px) {
-    .message {
-      flex-basis: 100%;
-      background-color: #f2f2f2;
-      width: 85%;
-      height: fit-content;
-      border-radius: 3px;
-      margin: 0.7em;
-      padding: 1em;
-    }
+  .message {
+    width: 85%;
+    margin: 0.7rem;
+    padding: 1rem;
+
+    background-color: #f2f2f2;
+    height: fit-content;
+    border-radius: 3px;
   }
 
-  @media (min-width: 540px) {
-    .message {
-      flex-basis: 25%;
-      background-color: #f2f2f2;
-      width: 50%;
-      height: max-content;
-      border-radius: 3px;
-      margin: 0.7em;
-      padding: 1em;
-    }
-  }
 
   .message-text {
     width: 100%;
