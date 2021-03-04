@@ -12,6 +12,7 @@
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
+    flex-direction: column-reverse;
     width: 100%;
     min-height: 100vh;
   }
