@@ -13,7 +13,7 @@
     flex-wrap: wrap;
     align-content: flex-start;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
   }
 
   @media (max-width: 540px) {
