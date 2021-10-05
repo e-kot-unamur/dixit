@@ -6,7 +6,7 @@ export async function getQuotes() {
 }
 
 export function postQuote(text, author) {
-    fetch('quotes', {
+    fetch('/quotes', {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ text, author }),
@@ -14,15 +14,15 @@ export function postQuote(text, author) {
 }
 
 // WebSocket
-const ws = new WebSocket(`${location.origin.replace('http', 'ws')}/ws`);
+const ws = new WebSocket(`${location.origin.replace('http', 'ws')}/quotes/ws`);
 
 ws.onclose = () => {
     setTimeout(() => location.reload(), 5000);
 };
 
 export function onQuote(callback) {
-    ws.onmessage = (message) => {
+    ws.addEventListener('message', (message) => {
         const quote = JSON.parse(message.data);
         callback(quote);
-    };
+    });
 }
