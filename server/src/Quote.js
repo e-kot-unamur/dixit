@@ -6,7 +6,7 @@ class Quote {
 
   constructor(id, author, text) {
     if (typeof author !== "string" || typeof text !== "string") {
-        throw new Error("author or text missing");
+        throw new TypeError("author or text missing");
     }
 
     this.id = id;

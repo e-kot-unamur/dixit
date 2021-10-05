@@ -1,4 +1,4 @@
-const fs = require("fs/promises");
+const fs = require("fs");
 const Quote = require("./Quote");
 
 class QuoteStore {
@@ -11,11 +11,11 @@ class QuoteStore {
     this.path = path;
   }
 
-  async load() {
-    await fs.mkdir(this.path, { recursive: true });
+  load() {
+    fs.mkdirSync(this.path, { recursive: true });
 
-    for (const entry of await fs.readdir(this.path)) {
-      const json = await fs.readFile(`${this.path}/${entry}`, "utf8");
+    for (const entry of fs.readdirSync(this.path)) {
+      const json = fs.readFileSync(`${this.path}/${entry}`, "utf8");
       const quote = JSON.parse(json);
       this.quotes.push(quote);
       this.counter = Math.max(this.counter, quote.id);
@@ -36,7 +36,7 @@ class QuoteStore {
 
     const path = `${this.path}/${quote.id}.json`;
     const data = JSON.stringify(quote);
-    fs.writeFile(path, data, "utf8").catch((error) => {
+    fs.writeFile(path, data, "utf8", (error) => {
       console.error(`failed to store quote - ${error}`);
     });
   }

@@ -2,14 +2,13 @@ const express = require("express");
 const expressWs = require("express-ws");
 const QuoteStore = require("./QuoteStore");
 
+const ADDRESS = parseInt(process.env.ADDRESS ?? "127.0.0.1");
 const PORT = parseInt(process.env.PORT ?? "8000");
-const PUBLIC_DIR = process.env.PUBLIC_DIR ?? "public";
 const QUOTES_DIR = process.env.QUOTES_DIR ?? "quotes";
 
 const store = new QuoteStore(QUOTES_DIR);
-const app = express();
 
-app.use(express.static(PUBLIC_DIR));
+const app = express();
 app.use(express.json());
 expressWs(app);
 
@@ -28,7 +27,7 @@ app.post("/quotes", (req, res) => {
     }
 });
 
-app.ws("/ws", (ws) => {
+app.ws("/quotes/ws", (ws) => {
     function send(quote) {
         ws.send(JSON.stringify(quote));
     }
@@ -37,8 +36,5 @@ app.ws("/ws", (ws) => {
     ws.on("close", () => store.removeCallback(send));
 });
 
-store.load().then(() => {
-    app.listen(PORT, () => {
-        console.info(`listening on 0.0.0.0:${PORT}`);
-    });
-});
+store.load();
+app.listen(PORT, ADDRESS, () => console.info(`listening on ${ADDRESS}:${PORT}`));
