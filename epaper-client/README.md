@@ -9,8 +9,8 @@ It shows available quotes in decreasing order on an e-paper display. Furthermore
 It can be configured using the following variables :
 
 - `PRODUCTION` - If set to `false`, the script will display new quotes in a window and wont be using the e-paper display at all (default: `true`).
-- `TIMEOUT` - Number of seconds to wait before the next quote is shown (default: `60`).
-- `HOST` - The address of the server (default: `localhost:8000`).
+- `TIMEOUT` - Number of seconds to wait before the next quote is shown (default: `180`).
+- `HOST` - The address and port of the server (default: `127.0.0.1:8000`).
 
 ## Architecture
 

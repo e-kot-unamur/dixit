@@ -17,10 +17,10 @@ from PIL import Image, ImageDraw, ImageFont
 from waveshare_epd import epd7in5b_HD as epd
 
 PRODUCTION = os.environ.get('PRODUCTION', '1').lower() not in ['0', 'false']
-TIMEOUT = int(os.environ.get('TIMEOUT', '60'))
-HOST = os.environ.get('HOST', 'localhost:8000')
+TIMEOUT = int(os.environ.get('TIMEOUT', '180'))
+HOST = os.environ.get('HOST', '127.0.0.1:8000')
 QUOTES_URL = f'http://{HOST}/quotes'
-WEBSOCKET_URL = f'ws://{HOST}/ws'
+WEBSOCKET_URL = f'ws://{HOST}/quotes/ws'
 PLACEHOLDER_QUOTE = {'id': 0, 'author': 'version 1.0.0', 'text': 'dixit', 'date': 0}
 
 
