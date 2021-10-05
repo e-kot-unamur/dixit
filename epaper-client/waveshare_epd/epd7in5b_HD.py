@@ -69,6 +69,7 @@ class EPD:
         logging.debug("e-Paper busy")
         busy = epdconfig.digital_read(self.busy_pin)
         while(busy == 1):
+            epdconfig.delay_ms(100)
             busy = epdconfig.digital_read(self.busy_pin)
         epdconfig.delay_ms(200)
             
