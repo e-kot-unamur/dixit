@@ -32,8 +32,16 @@ app.ws("/quotes/ws", (ws) => {
         ws.send(JSON.stringify(quote));
     }
 
+    function ping() {
+        ws.ping("heartbeat");
+    }
+
     store.addCallback(send);
-    ws.on("close", () => store.removeCallback(send));
+    const pingInterval = setInterval(ping, 30000);
+    ws.on("close", () => {
+        clearInterval(pingInterval);
+        store.removeCallback(send);
+    });
 });
 
 store.load();
