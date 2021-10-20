@@ -39,7 +39,7 @@ cd ..
 To start the server (under the `server` directory) :
 
 ```sh
-PORT=80 PUBLIC_DIR='../web-client/public' npm run start
+PORT=80 npm run start
 ```
 
 To start the e-paper carousel (in the `epaper-client` directory, under the previously created virtual environment) :
