@@ -2,7 +2,7 @@ const express = require("express");
 const expressWs = require("express-ws");
 const QuoteStore = require("./QuoteStore");
 
-const ADDRESS = parseInt(process.env.ADDRESS ?? "127.0.0.1");
+const ADDRESS = process.env.ADDRESS ?? "127.0.0.1";
 const PORT = parseInt(process.env.PORT ?? "8000");
 const QUOTES_DIR = process.env.QUOTES_DIR ?? "quotes";
 
