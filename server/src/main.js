@@ -29,11 +29,15 @@ app.post("/quotes", (req, res) => {
 
 app.ws("/quotes/ws", (ws) => {
     function send(quote) {
-        ws.send(JSON.stringify(quote));
+        if (ws.readyState === 1) {
+            ws.send(JSON.stringify(quote));
+        }
     }
 
     function ping() {
-        ws.ping("heartbeat");
+        if (ws.readyState === 1) {
+            ws.ping("heartbeat");
+        }
     }
 
     store.addCallback(send);

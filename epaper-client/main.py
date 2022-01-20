@@ -25,7 +25,7 @@ PLACEHOLDER_QUOTE = {'id': 0, 'author': 'version 1.0.0', 'text': 'dixit', 'date'
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    # logging.basicConfig(filename='logs.txt', level=logging.DEBUG)
 
     draws = queue.Queue()
 
