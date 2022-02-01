@@ -14,14 +14,15 @@ import urllib.request
 import websockets
 from PIL import Image, ImageDraw, ImageFont
 
-from waveshare_epd import epd7in5b_HD as epd
-
 PRODUCTION = os.environ.get('PRODUCTION', '1').lower() not in ['0', 'false']
 TIMEOUT = int(os.environ.get('TIMEOUT', '180'))
 HOST = os.environ.get('HOST', '127.0.0.1:8000')
 QUOTES_URL = f'http://{HOST}/quotes'
 WEBSOCKET_URL = f'ws://{HOST}/quotes/ws'
-PLACEHOLDER_QUOTE = {'id': 0, 'author': 'version 1.0.0', 'text': 'dixit', 'date': 0}
+PLACEHOLDER_QUOTE = {'id': 0, 'author':'version 1.0.0','context':'', 'text': 'dixit', 'date': 0}
+
+if PRODUCTION:
+    from waveshare_epd import epd7in5b_HD as epd
 
 
 def main():
@@ -95,7 +96,8 @@ def draw(draws):
     black_draw = ImageDraw.Draw(black_image)
     red_draw = ImageDraw.Draw(red_image) if PRODUCTION else black_draw
 
-    display = epd.EPD()
+    if PRODUCTION:
+        display = epd.EPD()
 
     # Main loop
     thread = threading.current_thread()
@@ -115,7 +117,7 @@ def draw(draws):
         black_draw.text(pos, text=text, font=text_font, fill=0, spacing=0, align='center')
 
         # Render author
-        author = quote['author']
+        author = quote['author'] + ' ' + quote['context']
         w, h = author_font.getsize(author)
         pos = (author_w - w) // 2, text_h + (author_h - h) // 2
         red_draw.text(pos, text=author, font=author_font, fill=0)
@@ -133,8 +135,9 @@ def draw(draws):
         red_draw.rectangle((0, 0, total_w, total_h), fill=255)
 
         logging.info('Drawing done')
-
-    display.Dev_exit()
+    
+    if PRODUCTION:    
+        display.Dev_exit()
 
 
 if __name__ == '__main__':

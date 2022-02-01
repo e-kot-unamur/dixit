@@ -12,6 +12,8 @@ const app = express();
 app.use(express.json());
 expressWs(app);
 
+app.use(express.static('../web-client/public'))
+
 app.get("/quotes", (_, res) => {
     res.json(store.quotes);
 });
@@ -19,7 +21,7 @@ app.get("/quotes", (_, res) => {
 app.post("/quotes", (req, res) => {
     try {
         const quote = req.body;
-        store.save(quote.author, quote.text);
+        store.save(quote.author, quote.context, quote.text);
         res.sendStatus(200);
     } catch (error) {
         console.error(`invalid quote - ${error}`);

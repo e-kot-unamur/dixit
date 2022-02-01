@@ -25,7 +25,8 @@ Each quote is stored as a separate JSON file under the quotes directory. The fol
 ```json
 {
     "id": 3,
-    "author": "John Doe, thinking about life",
+    "author": "John Doe",
+    "context": "thinking about life",
     "text": "Is the universe a donut?",
     "date": 1603371421079
 }

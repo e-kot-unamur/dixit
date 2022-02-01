@@ -25,8 +25,8 @@ class QuoteStore {
     console.info(`${this.quotes.length} quote(s) loaded from ${this.path}/`);
   }
 
-  save(author, text) {
-    const quote = new Quote(++this.counter, author, text);
+  save(author, context, text) {
+    const quote = new Quote(++this.counter, author, context, text);
     this.quotes.push(quote);
 
     console.info(`storing "${text}" by "${author}"`);
@@ -37,7 +37,9 @@ class QuoteStore {
     const path = `${this.path}/${quote.id}.json`;
     const data = JSON.stringify(quote);
     fs.writeFile(path, data, "utf8", (error) => {
-      console.error(`failed to store quote - ${error}`);
+      if (error !== null){
+        console.error(`failed to store quote - ${error}`);
+      } 
     });
   }
 

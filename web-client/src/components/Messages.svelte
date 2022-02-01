@@ -1,11 +1,39 @@
 <script>
-  import { getQuotes, onQuote } from "../api";
+  import { onDestroy } from "svelte";
+  import { getQuotes, offQuote, onQuote } from "../api";
 
   let response = [];
+
+  getQuotes().then(quotes => response = quotes);
   
-  getQuotes().then((quotes) => response = quotes);
-  onQuote((quote) => response = [...response, quote]);
+  function addQuote(quote) {
+    response = [...response, quote];
+  }
+
+  onQuote(addQuote);
+  onDestroy(() => offQuote(addQuote));
 </script>
+
+<div class="container">
+  {#await response then messages}
+    {#each messages as message}
+      <div class="message" key={message.text}>
+        <span class="message-date">
+          {new Date(message.date).toLocaleString("en-GB")}
+        </span>
+        <span class="message-text"
+          ><p />
+          {message.text}</span
+        >
+        <span class="message-author"> - {message.author} {message.context}</span>
+      </div>
+    {:else}
+      <div class="message"><span class="error">Aucun dixit.</span></div>
+    {/each}
+  {:catch error}
+    <div class="message"><span class="error">{error}</span></div>
+  {/await}
+</div>
 
 <style>
   .container {
@@ -26,7 +54,6 @@
     height: fit-content;
     border-radius: 3px;
   }
-
 
   .message-text {
     width: 100%;
@@ -52,22 +79,3 @@
     font-weight: 100;
   }
 </style>
-
-<div class="container">
-  {#await response then messages}
-    {#each messages as message}
-      <div class="message" key={message.text}>
-        <span class="message-date">
-          {(new Date(message.date).toLocaleString('en-GB', { timeZone: 'UTC' }))}
-        </span>
-        <span class="message-text"><p />
-          {message.text}</span>
-        <span class="message-author"> - {message.author}</span>
-      </div>
-    {:else}
-      <div class="message"><span class="error">Aucun dixit.</span></div>
-    {/each}
-  {:catch error}
-    <div class="message"><span class="error">{error}</span></div>
-  {/await}
-</div>
