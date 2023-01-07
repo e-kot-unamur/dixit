@@ -1,4 +1,4 @@
-// HTTP
+// 
 export async function getQuotes() {
   const response = await fetch('/quotes');
   const quotes = await response.json();
@@ -15,6 +15,7 @@ export function postQuote(text, author, context) {
 
 // WebSocket
 const ws = new WebSocket(`${location.origin.replace('http', 'ws')}/quotes/ws`);
+let password = '';
 
 ws.onclose = () => {
   setTimeout(() => location.reload(), 5000);
@@ -26,7 +27,6 @@ export function onQuote(callback) {
     callback(quote);
   });
 }
-
 export function offQuote(callback) {
   ws.removeEventListener('message', callback)
 }
@@ -35,6 +35,18 @@ export function getAuthors(quotes) {
   let unfilteredAuthors = quotes.map(q => q.author);
   let authors = filterAuthors(unfilteredAuthors)
   return authors;
+}
+
+export function checkPass(callback){
+  ws.addEventListener('message', (event) => {
+    const resp = JSON.parse(event.data)
+    callback(resp.exists);
+  });
+};
+
+export function checkPassword(event) {
+  password = event.target.value;
+  ws.send(JSON.stringify({message:"check-env-var", variable:password}));
 }
 
 //returns Map("value",#occurence) of an array
@@ -50,4 +62,6 @@ function filterAuthors(arr) {
   }
   return myMap;
 }
+
+
 

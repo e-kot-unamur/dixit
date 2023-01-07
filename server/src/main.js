@@ -2,7 +2,7 @@ const express = require("express");
 const expressWs = require("express-ws");
 const QuoteStore = require("./QuoteStore");
 
-const ADDRESS = process.env.ADDRESS ?? "127.0.0.1";
+const ADDRESS = process.env.ADDRESS ?? "0.0.0.0";
 const PORT = parseInt(process.env.PORT ?? "8000");
 const QUOTES_DIR = process.env.QUOTES_DIR ?? "quotes";
 
@@ -48,6 +48,16 @@ app.ws("/quotes/ws", (ws) => {
         clearInterval(pingInterval);
         store.removeCallback(send);
     });
+    ws.on('message',(message) => {
+        const data = JSON.parse(message);
+        if (data.message === 'check-env-var') {
+            if (data.variable === process.env.PASSWORD) {
+                ws.send(JSON.stringify({ exists: true }));
+            } else {
+                ws.send(JSON.stringify({ exists: false }));
+            }
+        }
+    })
 });
 
 store.load();

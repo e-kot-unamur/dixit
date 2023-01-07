@@ -15,6 +15,4 @@ RUN npm run build
 
 WORKDIR /app/server
 
-EXPOSE 80
-
 CMD ["npm","run","start"]
