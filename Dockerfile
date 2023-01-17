@@ -15,4 +15,6 @@ RUN npm run build
 
 WORKDIR /app/server
 
+RUN mkdir quotes
+
 CMD ["npm","run","start"]
