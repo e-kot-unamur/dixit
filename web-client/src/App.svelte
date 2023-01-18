@@ -8,15 +8,14 @@
   let show;
 
   function setShow(state){
-
+    //Display form, messages and get rid of password box
     if (state){
       show = state;
-      let temp = document.getElementById("temp");
+      let temp = document.getElementById("pwd-box");
       temp.remove();
     }
   }
 
-  
   checkPass(setShow)
 
   let items = [
@@ -35,16 +34,10 @@
 </script>
 
 <main>
-  <div id="temp">
-    <div class="container">
-      <h1>Dixit</h1>
-        <div class = "card">
-
-        
-          <label> Password : <input id="pwd" type="password" on:input={checkPassword}/> </label>
-        </div>
+    <h1>Dixit</h1>
+    <div id = "pwd-box" class = "card">
+      <label> Password : <input id="pwd" type="password" on:input={checkPassword}/> </label>
     </div>
-  </div>
   {#if show}
     <Form/>
     <Tabs {items}/>
@@ -56,18 +49,16 @@
     margin: auto;
     max-width: 35rem;
   }
-.container {
+.card{
     display: flex;
     flex-wrap: wrap;
+    padding: 20px;
+    background-color: #f2f2f2;
+    width: 100%;
     align-items: center;
     justify-content: center;
     align-content: flex-start;
-    width: 100%;
-  }
-.card{
-    padding: 20px;
-    background-color: #f2f2f2;
-    width: 65vw;
+
 }
   h1 {
   flex-basis: 100%;
@@ -77,8 +68,7 @@
   margin-bottom: 10vh;
   }
 
-  input,
-  textarea {
+  input{
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;

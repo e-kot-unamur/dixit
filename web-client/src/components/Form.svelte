@@ -33,7 +33,6 @@
 </script>
 
 <div class="container">
-  <h1>Dixit</h1>
   <form on:submit|preventDefault={handleSubmit}>
 
     Ajouter nouvel auteur<br />
